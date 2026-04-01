@@ -46,15 +46,28 @@ function AdminConsole() {
       roleBadge="Admin"
       navPills={[
         { id: 'hotels', label: 'Authorization Queue' },
-        { id: 'users', label: 'Users' },
-        { id: 'bookings', label: 'Global Bookings' }
+        { id: 'users', label: 'Users' }
       ]}
       currentView={adminView}
       setCurrentView={setAdminView}
     >
       {adminView === 'hotels' && <AdminHotelsView />}
       {adminView === 'users' && <UsersView />}
-      {adminView === 'bookings' && <BookingsView isAdmin={true} />}
+    </DashboardLayout>
+  );
+}
+
+function TravelerConsole() {
+  return (
+    <DashboardLayout 
+      title="My Travel Ledger"
+      subtitle="Review your upcoming journeys, manage reservations, and access your digital itinerary."
+      roleBadge="Traveler"
+      navPills={[{ id: 'bookings', label: 'My Bookings' }]}
+      currentView="bookings"
+      setCurrentView={() => {}}
+    >
+      <BookingsView isAdmin={false} />
     </DashboardLayout>
   );
 }
@@ -64,6 +77,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/bookings" element={<TravelerConsole />} />
       <Route path="/manager/*" element={<ManagerConsole />} />
       <Route path="/admin/*" element={<AdminConsole />} />
       <Route path="*" element={<Navigate to="/" />} />

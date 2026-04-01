@@ -26,6 +26,17 @@ public class BookingController {
         return new ResponseEntity<>(booking, HttpStatus.CREATED);
     }
 
+    @PostMapping("/{id}/verify-otp")
+    public ResponseEntity<?> verifyOtp(@PathVariable Long id, @RequestBody Map<String, String> request) {
+        String otp = request.get( "otp");
+        boolean isVerified = bookingService.verifyBookingOtp(id, otp);
+        if (isVerified) {
+            return ResponseEntity.ok(Map.of("message", "Booking verified successfully"));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Invalid OTP"));
+        }
+    }
+
     @PostMapping("/{id}/cancel")
     public ResponseEntity<?> cancelBooking(@PathVariable Long id, Authentication authentication) {
         bookingService.cancelBooking(id, authentication.getName());

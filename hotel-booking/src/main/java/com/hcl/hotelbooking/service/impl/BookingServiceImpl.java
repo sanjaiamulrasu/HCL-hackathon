@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +54,8 @@ public class BookingServiceImpl implements BookingService {
         long days = ChronoUnit.DAYS.between(request.getCheckInDate(), request.getCheckOutDate());
         Double totalPrice = days * room.getPrice();
 
+        String otp = String.format("%06d", new Random().nextInt(999999));
+        
         Booking booking = Booking.builder()
                 .user(user)
                 .room(room)
@@ -60,14 +63,36 @@ public class BookingServiceImpl implements BookingService {
                 .checkOutDate(request.getCheckOutDate())
                 .totalPrice(totalPrice)
                 .status(BookingStatus.PENDING)
+                .otp(otp)
+                .isVerified(false)
                 .build();
 
         Booking savedBooking = bookingRepository.save(booking);
         
-        // Email sent after successful booking creation
-        emailService.sendBookingConfirmation(user.getEmail(), savedBooking.getId());
+        // Send OTP email instead of confirmation
+        emailService.sendBookingOtpEmail(user.getEmail(), otp, savedBooking.getId());
         
         return savedBooking;
+    }
+
+    @Override
+    @Transactional
+    public boolean verifyBookingOtp(Long bookingId, String otp) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+        
+        if (booking.isVerified()) return true;
+        
+        if (booking.getOtp() != null && booking.getOtp().equals(otp)) {
+            booking.setVerified(true);
+            booking.setOtp(null);
+            bookingRepository.save(booking);
+            
+            // Now send actual confirmation
+            emailService.sendBookingConfirmation(booking.getUser().getEmail(), booking.getId());
+            return true;
+        }
+        return false;
     }
 
     @Override

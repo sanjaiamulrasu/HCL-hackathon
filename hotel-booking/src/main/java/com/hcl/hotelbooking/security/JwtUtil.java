@@ -52,7 +52,15 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        // You can add more claims like roles here
+        // Add roles to the claims
+        claims.put("authorities", userDetails.getAuthorities().stream()
+                .map(org.springframework.security.core.GrantedAuthority::getAuthority)
+                .collect(java.util.stream.Collectors.toList()));
+        
+        if (userDetails instanceof com.hcl.hotelbooking.entity.User) {
+            claims.put("name", ((com.hcl.hotelbooking.entity.User) userDetails).getName());
+        }
+        
         return createToken(claims, userDetails.getUsername());
     }
 

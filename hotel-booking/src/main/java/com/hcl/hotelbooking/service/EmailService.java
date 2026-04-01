@@ -5,4 +5,5 @@ public interface EmailService {
     void sendBookingConfirmation(String to, Long bookingId);
     void sendCancellationEmail(String to, Long bookingId);
     void sendPaymentReceipt(String to, Long bookingId, Double amount);
+    void sendBookingOtpEmail(String to, String otp, Long bookingId);
 }

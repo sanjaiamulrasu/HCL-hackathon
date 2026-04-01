@@ -13,7 +13,7 @@ export default function RoomsView() {
 
   // Form — matches RoomDto: roomNumber, type, price, isAvailable, hotelId
   const [roomNumber, setRoomNumber] = useState('');
-  const [type, setType] = useState('STANDARD');
+  const [type, setType] = useState('SINGLE');
   const [price, setPrice] = useState('');
   const [isAvailable, setIsAvailable] = useState(true);
   const [formHotelId, setFormHotelId] = useState('');
@@ -205,7 +205,7 @@ export default function RoomsView() {
                     required value={type} onChange={e => setType(e.target.value)}
                     className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent/50 appearance-none font-medium text-[15px]"
                   >
-                    <option value="STANDARD">Standard</option>
+                    <option value="SINGLE">Single</option>
                     <option value="DELUXE">Deluxe</option>
                     <option value="SUITE">Suite</option>
                   </select>

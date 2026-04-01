@@ -70,6 +70,14 @@ export const bookingsApi = {
   cancel: (id) => request(`/api/bookings/${id}/cancel`, { method: 'POST' }),
   getById: (id) => request(`/api/bookings/${id}`),
   myBookings: () => request('/api/bookings/my-bookings'),
+  verifyOtp: (id, otp) => request(`/api/bookings/${id}/verify-otp`, { method: 'POST', body: JSON.stringify({ otp }) }),
+};
+
+// ── Admin Users Management ──────────────────────────
+export const adminApi = {
+  getUsers: () => request('/api/admin/users'),
+  deleteUser: (id) => request(`/api/admin/users/${id}`, { method: 'DELETE' }),
+  updateRole: (id, role) => request(`/api/admin/users/${id}/role`, { method: 'PUT', body: JSON.stringify({ role }) }),
 };
 
 // ── Payments ──────────────────────────────────────────

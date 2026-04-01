@@ -24,20 +24,17 @@ public class HotelController {
     private final HotelService hotelService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<HotelDto> addHotel(@Valid @RequestBody HotelDto hotelDto) {
+        public ResponseEntity<HotelDto> addHotel(@Valid @RequestBody HotelDto hotelDto) {
         return new ResponseEntity<>(hotelService.addHotel(hotelDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<HotelDto> updateHotel(@PathVariable Long id, @Valid @RequestBody HotelDto hotelDto) {
+        public ResponseEntity<HotelDto> updateHotel(@PathVariable Long id, @Valid @RequestBody HotelDto hotelDto) {
         return ResponseEntity.ok(hotelService.updateHotel(id, hotelDto));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Void> deleteHotel(@PathVariable Long id) {
+        public ResponseEntity<Void> deleteHotel(@PathVariable Long id) {
         hotelService.deleteHotel(id);
         return ResponseEntity.noContent().build();
     }

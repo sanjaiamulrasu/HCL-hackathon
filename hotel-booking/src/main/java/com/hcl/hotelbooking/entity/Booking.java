@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@com.fasterxml.jackson.annotation.JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +37,11 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
+    private String otp;
+    @Builder.Default
+    private boolean isVerified = false;
+
     @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Payment payment;
 }

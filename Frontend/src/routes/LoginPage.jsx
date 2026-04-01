@@ -129,23 +129,28 @@ export default function LoginPage() {
               {mode === 'register' && (
                 <div className="space-y-4">
                   {/* Role Selector */}
-                  <div className="grid grid-cols-2 gap-3 mb-6">
-                    <button
-                      type="button"
-                      onClick={() => setRole('USER')}
-                      className={`flex flex-col items-center gap-2 p-4 rounded-3xl border-2 transition-all ${role === 'USER' ? 'border-blue-500 bg-blue-500/10 text-white' : 'border-white/5 bg-white/5 text-white/40 hover:border-white/10'}`}
-                    >
-                      <User size={20} />
-                      <span className="text-[10px] font-black uppercase tracking-widest">Traveler</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setRole('HOTEL_MANAGER')}
-                      className={`flex flex-col items-center gap-2 p-4 rounded-3xl border-2 transition-all ${role === 'HOTEL_MANAGER' ? 'border-blue-500 bg-blue-500/10 text-white' : 'border-white/5 bg-white/5 text-white/40 hover:border-white/10'}`}
-                    >
-                      <Building2 size={20} />
-                      <span className="text-[10px] font-black uppercase tracking-widest">Manager</span>
-                    </button>
+                  <div className="space-y-3 mb-6">
+                    <label className="text-[10px] font-black uppercase tracking-[0.25em] text-white/40 ml-1 italic">
+                      Account Type: <span className="text-blue-400">{role === 'USER' ? 'Traveler' : 'Hotel Manager'}</span>
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => { console.log('Setting role: USER'); setRole('USER'); }}
+                        className={`flex flex-col items-center gap-2 p-5 rounded-3xl border-2 transition-all duration-300 ${role === 'USER' ? 'border-blue-500 bg-blue-500/15 shadow-[0_0_20px_rgba(59,130,246,0.2)]' : 'border-white/5 bg-white/5 text-white/30 truncate'}`}
+                      >
+                        <User size={24} className={role === 'USER' ? 'text-blue-400' : ''} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Traveler</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => { console.log('Setting role: HOTEL_MANAGER'); setRole('HOTEL_MANAGER'); }}
+                        className={`flex flex-col items-center gap-2 p-5 rounded-3xl border-2 transition-all duration-300 ${role === 'HOTEL_MANAGER' ? 'border-blue-500 bg-blue-500/15 shadow-[0_0_20px_rgba(59,130,246,0.2)]' : 'border-white/5 bg-white/5 text-white/30 truncate'}`}
+                      >
+                        <Building2 size={24} className={role === 'HOTEL_MANAGER' ? 'text-blue-400' : ''} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Manager</span>
+                      </button>
+                    </div>
                   </div>
 
                   <div className="relative group">

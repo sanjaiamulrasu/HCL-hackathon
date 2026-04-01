@@ -14,7 +14,9 @@ export default function HotelRoomsModal({ hotel, onClose }) {
   const [bookingLoading, setBookingLoading] = useState(false);
   const [createdBooking, setCreatedBooking] = useState(null);
   const [showPayment, setShowPayment] = useState(false);
-  const [step, setStep] = useState('DATES'); // DATES, ROOMS, CONFIRM
+  const [step, setStep] = useState('DATES'); // DATES, ROOMS, VERIFY_OTP, CONFIRM
+  const [bookingOtp, setBookingOtp] = useState('');
+  const [verifying, setVerifying] = useState(false);
   
   const { user } = useUser();
   const navigate = useNavigate();
@@ -54,11 +56,29 @@ export default function HotelRoomsModal({ hotel, onClose }) {
         checkOutDate: checkOut
       });
       setCreatedBooking(booking);
-      setShowPayment(true);
+      setStep('VERIFY_OTP');
     } catch (err) {
       setError(err.message);
     } finally {
       setBookingLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (!bookingOtp || bookingOtp.length < 6) {
+      setError('Please enter the 6-digit security code.');
+      return;
+    }
+
+    setVerifying(true);
+    setError('');
+    try {
+      await bookingsApi.verifyOtp(createdBooking.id, bookingOtp);
+      setShowPayment(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setVerifying(false);
     }
   };
 
@@ -77,16 +97,17 @@ export default function HotelRoomsModal({ hotel, onClose }) {
             {[
               { id: 'DATES', label: 'SELECT DATES' },
               { id: 'ROOMS', label: 'CHOOSE ROOM' },
+              { id: 'VERIFY_OTP', label: 'VERIFY' },
               { id: 'CONFIRM', label: 'BOOKED' }
             ].map((s, idx) => (
               <div key={s.id} className="flex items-center gap-3">
-                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black tracking-tighter ${step === s.id ? 'bg-brand text-slate-900' : 'bg-white/10 text-white/40'}`}>
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black tracking-tighter ${step === s.id ? 'bg-brand text-slate-900 border-2 border-brand shadow-[0_0_10px_rgba(255,215,0,0.5)]' : 'bg-white/10 text-white/40'}`}>
                   {idx + 1}
                 </span>
                 <span className={`text-[10px] font-black tracking-[0.2em] uppercase ${step === s.id ? 'text-brand' : 'text-white/20'}`}>
                   {s.label}
                 </span>
-                {idx < 2 && <ArrowRight size={10} className="text-white/10" />}
+                {idx < 3 && <ArrowRight size={10} className="text-white/10" />}
               </div>
             ))}
           </div>
@@ -123,12 +144,48 @@ export default function HotelRoomsModal({ hotel, onClose }) {
               </div>
               <div className="pt-8">
                 <button 
-                  onClick={() => navigate('/portal')}
+                  onClick={() => navigate('/')}
                   className="bg-white text-slate-900 px-10 py-4 rounded-3xl font-black text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/5"
                 >
                   Manage My Bookings
                 </button>
               </div>
+            </div>
+          ) : step === 'VERIFY_OTP' ? (
+            <div className="py-12 space-y-10 animate-fade-in text-center max-w-md mx-auto">
+               <div className="space-y-3">
+                  <h3 className="text-3xl font-black text-white tracking-tight italic">Verify Your Identity</h3>
+                  <p className="text-white/40 text-xs font-bold leading-relaxed uppercase tracking-widest">
+                    A security code has been dispatched to <span className="text-brand">{user?.email}</span>. Please authorize this reservation.
+                  </p>
+               </div>
+
+               {error && <p className="text-red-400 bg-red-400/10 border border-red-400/20 px-8 py-3 rounded-2xl font-bold tracking-tight animate-fade-in">{error}</p>}
+
+               <div className="space-y-6">
+                  <input
+                    type="text"
+                    maxLength={6}
+                    value={bookingOtp}
+                    onChange={(e) => setBookingOtp(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-3xl px-4 py-8 text-white text-center text-5xl font-black outline-none focus:border-brand/50 transition-all font-mono tracking-[0.4em] shadow-inner"
+                    placeholder="000000"
+                    required
+                  />
+                  <button
+                    onClick={handleVerifyOtp}
+                    disabled={verifying}
+                    className="w-full bg-brand py-5 rounded-3xl font-black text-xs uppercase tracking-[0.2em] text-slate-900 hover:bg-yellow-300 transition-all disabled:opacity-50 shadow-xl shadow-brand/10"
+                  >
+                    {verifying ? 'Authenticating...' : 'Confirm Verification'}
+                  </button>
+                  <button 
+                    onClick={() => setStep('ROOMS')}
+                    className="text-[10px] font-black uppercase tracking-widest text-white/20 hover:text-white/40 transition-colors"
+                  >
+                    Reselect Room
+                  </button>
+               </div>
             </div>
           ) : (
             <>

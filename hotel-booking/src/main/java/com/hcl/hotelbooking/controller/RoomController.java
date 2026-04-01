@@ -21,20 +21,17 @@ public class RoomController {
     private final RoomService roomService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<RoomDto> addRoom(@Valid @RequestBody RoomDto roomDto) {
+        public ResponseEntity<RoomDto> addRoom(@Valid @RequestBody RoomDto roomDto) {
         return new ResponseEntity<>(roomService.addRoom(roomDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<RoomDto> updateRoom(@PathVariable Long id, @Valid @RequestBody RoomDto roomDto) {
+        public ResponseEntity<RoomDto> updateRoom(@PathVariable Long id, @Valid @RequestBody RoomDto roomDto) {
         return ResponseEntity.ok(roomService.updateRoom(id, roomDto));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
+        public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
         roomService.deleteRoom(id);
         return ResponseEntity.noContent().build();
     }

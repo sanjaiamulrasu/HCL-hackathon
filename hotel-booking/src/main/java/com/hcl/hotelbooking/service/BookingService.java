@@ -10,4 +10,5 @@ public interface BookingService {
     void cancelBooking(Long bookingId, String userEmail);
     Booking getBookingById(Long bookingId);
     List<Booking> getUserBookings(String userEmail);
+    boolean verifyBookingOtp(Long bookingId, String otp);
 }
