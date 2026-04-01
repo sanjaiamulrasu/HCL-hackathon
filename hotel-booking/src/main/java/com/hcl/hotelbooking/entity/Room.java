@@ -33,5 +33,6 @@ public class Room {
     private Hotel hotel;
 
     @OneToMany(mappedBy = "room")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private List<Booking> bookings;
 }

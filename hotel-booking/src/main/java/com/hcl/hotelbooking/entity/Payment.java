@@ -18,6 +18,7 @@ public class Payment {
 
     @OneToOne
     @JoinColumn(name = "booking_id", nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Booking booking;
 
     @Column(nullable = false)

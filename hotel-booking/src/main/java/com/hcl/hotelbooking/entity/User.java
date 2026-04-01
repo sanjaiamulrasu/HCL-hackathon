@@ -29,6 +29,7 @@ public class User implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(30)", nullable = false)
     private Role role;
     
     // OTP verification fields
@@ -37,6 +38,7 @@ public class User implements UserDetails {
     private boolean isVerified = false;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private List<Booking> bookings;
 
     @Override

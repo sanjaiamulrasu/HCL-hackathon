@@ -1,4 +1,5 @@
 D:\HCL hackathon\hotel-booking\src\main\java\com\hcl\hotelbooking\config\OpenApiConfig.java
+D:\HCL hackathon\hotel-booking\src\main\java\com\hcl\hotelbooking\config\CorsConfig.java
 D:\HCL hackathon\hotel-booking\src\main\java\com\hcl\hotelbooking\dto\RegisterRequest.java
 D:\HCL hackathon\hotel-booking\src\main\java\com\hcl\hotelbooking\entity\Payment.java
 D:\HCL hackathon\hotel-booking\src\main\java\com\hcl\hotelbooking\service\impl\BookingServiceImpl.java
