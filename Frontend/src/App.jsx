@@ -31,7 +31,7 @@ function ManagerConsole() {
     >
       {managerView === 'hotels' && <HotelsView />}
       {managerView === 'rooms' && <RoomsView />}
-      {managerView === 'bookings' && <BookingsView isAdmin={false} />}
+      {managerView === 'bookings' && <BookingsView isAdmin={true} />}
     </DashboardLayout>
   );
 }

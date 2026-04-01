@@ -50,6 +50,12 @@ public class BookingController {
 
     @GetMapping("/my-bookings")
     public ResponseEntity<List<Booking>> getUserBookings(Authentication authentication) {
+        boolean isPrivileged = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ADMIN") || a.getAuthority().equals("HOTEL_MANAGER"));
+        
+        if (isPrivileged) {
+            return ResponseEntity.ok(bookingService.getAllBookings());
+        }
         return ResponseEntity.ok(bookingService.getUserBookings(authentication.getName()));
     }
 }
