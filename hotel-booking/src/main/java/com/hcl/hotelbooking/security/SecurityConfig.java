@@ -31,8 +31,9 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/hotels/search").permitAll()
-                .requestMatchers("/api/hotels/**").hasAuthority("ADMIN") // Only ADMIN can add/update hotels
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/hotels/**").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/rooms/**").permitAll()
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

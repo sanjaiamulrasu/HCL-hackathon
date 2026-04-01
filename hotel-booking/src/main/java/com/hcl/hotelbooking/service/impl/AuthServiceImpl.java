@@ -19,8 +19,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
@@ -36,11 +39,17 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String otp = generateOtp();
+        Role assignedRole = Role.USER;
+        if (request.getRole() != null) {
+            if (request.getRole().equalsIgnoreCase("ADMIN")) assignedRole = Role.ADMIN;
+            else if (request.getRole().equalsIgnoreCase("HOTEL_MANAGER")) assignedRole = Role.HOTEL_MANAGER;
+        }
+
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole() != null && request.getRole().equalsIgnoreCase("ADMIN") ? Role.ADMIN : Role.USER)
+                .role(assignedRole)
                 .otp(otp)
                 .otpExpiry(System.currentTimeMillis() + 300000) // 5 minutes
                 .isVerified(false)
